@@ -10,11 +10,16 @@ Input:  Keyboard (kb)
 Output: Standard out (print)
         Will have system out dumped into text file via cs3750a server command
 
-Todo: test, refactor
+Todo: test, refactor (shared setup module that gives same functionality as
+      currently. Callable as method with arguments or with none or from
+      command line with system arguments)
 """
 
 from ctypes import c_uint32
 import sys
+# pylint: disable=too-many-statements
+# pylint: disable=duplicate-code
+
 
 DELTA_ONE = c_uint32(int("0x11111111", 16)).value
 DELTA_TWO = c_uint32(int("0x22222222", 16)).value
