@@ -47,15 +47,16 @@ def main(*kwargs):
     else:
         k_zero = "0x" + \
             input("Please input K[0] in Hex String (without “0x”): ")
-        k_one = "0x" + input("Please input K[1] in Hex String (without “0x”): ")
-        k_two = "0x" + input("Please input K[2] in Hex String (without “0x”): ")
+        k_one = "0x" + \
+            input("Please input K[1] in Hex String (without “0x”): ")
+        k_two = "0x" + \
+            input("Please input K[2] in Hex String (without “0x”): ")
         k_three = "0x" + \
             input("Please input K[3] in Hex String (without “0x”): ")
         l_two = "0x" + \
             input("\nPlease input L[2] in Hex String (without “0x”): ")
         r_two = "0x" + \
             input("Please input R[2] in Hex String (without “0x”): ")
-
 
     def convert_ctype():
         "converts inputed values into ctypes"
@@ -79,7 +80,8 @@ def main(*kwargs):
         add_delta_two = c_uint32(SUM_DELTA + DELTA_TWO).value
         reverse_one_add_delta_two = c_uint32(L_LIST[2] + add_delta_two).value
 
-        xor_first = c_uint32(reverse_one_left4_add ^ reverse_one_right5_add).value
+        xor_first = c_uint32(
+            reverse_one_left4_add ^ reverse_one_right5_add).value
         xor_second = c_uint32(xor_first ^ reverse_one_add_delta_two).value
 
         R_LIST[0] = c_uint32(R_LIST[2] - xor_second).value

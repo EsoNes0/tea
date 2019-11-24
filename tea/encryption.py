@@ -25,7 +25,6 @@ L_LIST = [0, 1, 2]
 R_LIST = [0, 1, 2]
 
 
-
 def main(*kwargs):
     """Tiny encryption algorithm encrypt method"""
     _args = []
@@ -48,15 +47,16 @@ def main(*kwargs):
     else:
         k_zero = "0x" + \
             input("Please input K[0] in Hex String (without “0x”): ")
-        k_one = "0x" + input("Please input K[1] in Hex String (without “0x”): ")
-        k_two = "0x" + input("Please input K[2] in Hex String (without “0x”): ")
+        k_one = "0x" + \
+            input("Please input K[1] in Hex String (without “0x”): ")
+        k_two = "0x" + \
+            input("Please input K[2] in Hex String (without “0x”): ")
         k_three = "0x" + \
             input("Please input K[3] in Hex String (without “0x”): ")
         l_zero = "0x" + \
             input("\nPlease input L[0] in Hex String (without “0x”): ")
         r_zero = "0x" + \
             input("Please input R[0] in Hex String (without “0x”): ")
-
 
     def convert_ctype():
         "converts inputed values into ctypes"
@@ -106,7 +106,6 @@ def main(*kwargs):
     find_l2_r2()
 
 
-
     def print_result():
         print("\nDeltaOne = " + hex(DELTA_ONE).rstrip("L"))
         print("DeltaTwo = " + hex(DELTA_TWO).rstrip("L"))
@@ -121,6 +120,7 @@ def main(*kwargs):
         print("R[2] = " + hex(R_LIST[2]).rstrip("L"))
 
     print_result()
+
 
 if __name__ == '__main__':
     main()
