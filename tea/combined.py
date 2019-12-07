@@ -30,7 +30,8 @@ R_LIST = [0, 1, 2]
 def main(*kwargs):
     """Tiny encryption algorithm encrypt method"""
     _args = []
-    encrypt_or_decrypt = 3
+
+
     if sys.argv:
         for arg in sys.argv:
             _args.append(str(arg).strip("'"))
@@ -38,6 +39,16 @@ def main(*kwargs):
     if kwargs is not None:
         for kwarg in kwargs:
             _args.append(str(kwarg).strip("'"))
+
+    set_variables(_args)
+
+
+def set_variables(_args):
+    """Sets variables for encryption and decryption"""
+
+    k = [0, 1, 2, 3]
+    zero = {}
+    two = {}
 
     if len(_args) >= 3:
         if str(_args[1]) == "encrypt":
@@ -48,64 +59,65 @@ def main(*kwargs):
 
     if len(_args) == 7:
         if encrypt_or_decrypt == 1:
-            l_zero = "0x" + _args[5]
-            r_zero = "0x" + _args[6]
+            zero['l'] = "0x" + _args[5]
+            zero['r'] = "0x" + _args[6]
         if encrypt_or_decrypt == 0:
-            l_two = "0x" + _args[5]
-            r_two = "0x" + _args[6]
-        k_zero = "0x" + _args[1]
-        k_one = "0x" + _args[2]
-        k_two = "0x" + _args[3]
-        k_three = "0x" + _args[4]
+            two['l'] = "0x" + _args[5]
+            two['r'] = "0x" + _args[6]
+        k[0] = "0x" + _args[1]
+        k[1] = "0x" + _args[2]
+        k[2] = "0x" + _args[3]
+        k[3] = "0x" + _args[4]
 
     elif len(_args) == 8:
         if _args[1] == 'encrypt':
-            l_zero = "0x" + _args[6]
-            r_zero = "0x" + _args[7]
+            zero['l'] = "0x" + _args[6]
+            zero['r'] = "0x" + _args[7]
         if _args[1] == 'decrypt':
-            l_two = "0x" + _args[6]
-            r_two = "0x" + _args[7]
-        k_zero = "0x" + _args[2]
-        k_one = "0x" + _args[3]
-        k_two = "0x" + _args[4]
-        k_three = "0x" + _args[5]
+            two['l'] = "0x" + _args[6]
+            two['r'] = "0x" + _args[7]
+        k[0] = "0x" + _args[2]
+        k[1] = "0x" + _args[3]
+        k[2] = "0x" + _args[4]
+        k[3] = "0x" + _args[5]
 
     else:
         encrypt_or_decrypt = int(input(
             "Please enter 1 for encryption and 0 for decryption: "))
-        k_zero = "0x" + \
+        k[0] = "0x" + \
             input("Please input K[0] in Hex String (without “0x”): ")
-        k_one = "0x" + \
+        k[1] = "0x" + \
             input("Please input K[1] in Hex String (without “0x”): ")
-        k_two = "0x" + \
+        k[2] = "0x" + \
             input("Please input K[2] in Hex String (without “0x”): ")
-        k_three = "0x" + \
+        k[3] = "0x" + \
             input("Please input K[3] in Hex String (without “0x”): ")
         if encrypt_or_decrypt == 1:
-            l_zero = "0x" + \
+            zero['l'] = "0x" + \
                 input("\nPlease input L[0] in Hex String (without “0x”): ")
-            r_zero = "0x" + \
+            zero['r'] = "0x" + \
                 input("Please input R[0] in Hex String (without “0x”): ")
         elif encrypt_or_decrypt == 0:
-            l_two = "0x" + \
+            two['l'] = "0x" + \
                 input("\nPlease input L[2] in Hex String (without “0x”): ")
-            r_two = "0x" + \
+            two['r'] = "0x" + \
                 input("Please input R[2] in Hex String (without “0x”): ")
 
-    def convert_ctype():
-        "converts inputed values into ctypes"
-        K[0] = c_uint32(int(k_zero, 16)).value
-        K[1] = c_uint32(int(k_one, 16)).value
-        K[2] = c_uint32(int(k_two, 16)).value
-        K[3] = c_uint32(int(k_three, 16)).value
-        if encrypt_or_decrypt == 1:
-            L_LIST[0] = c_uint32(int(l_zero, 16)).value
-            R_LIST[0] = c_uint32(int(r_zero, 16)).value
-        if encrypt_or_decrypt == 0:
-            L_LIST[2] = c_uint32(int(l_two, 16)).value
-            R_LIST[2] = c_uint32(int(r_two, 16)).value
+    convert_ctype(k, zero, two, encrypt_or_decrypt)
 
-    convert_ctype()
+
+def convert_ctype(k, zero, two, encrypt_or_decrypt):
+    "converts inputed values into ctypes"
+    K[0] = c_uint32(int(k[0], 16)).value
+    K[1] = c_uint32(int(k[1], 16)).value
+    K[2] = c_uint32(int(k[2], 16)).value
+    K[3] = c_uint32(int(k[3], 16)).value
+    if encrypt_or_decrypt == 1:
+        L_LIST[0] = c_uint32(int(zero['l'], 16)).value
+        R_LIST[0] = c_uint32(int(zero['r'], 16)).value
+    if encrypt_or_decrypt == 0:
+        L_LIST[2] = c_uint32(int(two['l'], 16)).value
+        R_LIST[2] = c_uint32(int(two['r'], 16)).value
 
     if encrypt_or_decrypt == 1:
         find_l1_r1()
@@ -116,6 +128,7 @@ def main(*kwargs):
         reverse_from_l2()
         second_step_r0_l2()
         print_result_reverse()
+
 
 def print_result_reverse():
     """Print results function for decryption"""
@@ -147,6 +160,7 @@ def print_result():
 
 
 def find_l1_r1():
+    """Finds L1 and R1, first method of encryption"""
     round_one_left4 = c_uint32(R_LIST[0] << 4).value
     round_one_left4_add = c_uint32(round_one_left4 + K[0]).value
 
@@ -163,6 +177,7 @@ def find_l1_r1():
 
 
 def find_l2_r2():
+    """Finds L2 and R2, second method of encryption"""
     round_two_left4 = c_uint32(R_LIST[1] << 4).value
     round_two_left4_add = c_uint32(round_two_left4 + K[2]).value
 
@@ -181,6 +196,7 @@ def find_l2_r2():
 
 
 def reverse_from_l2():
+    """Reverses from given L2, first method of decryption"""
     reverse_one_left4 = c_uint32(L_LIST[2] << 4).value
     reverse_one_left4_add = c_uint32(reverse_one_left4 + K[2]).value
 
@@ -197,6 +213,7 @@ def reverse_from_l2():
     R_LIST[0] = c_uint32(R_LIST[2] - xor_second).value
 
 def second_step_r0_l2():
+    """Finds L0 and R0, second method of decryption"""
     reverse_two_left4 = c_uint32(R_LIST[0] << 4).value
     reverse_two_left4_add = c_uint32(reverse_two_left4 + K[0]).value
 
