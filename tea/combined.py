@@ -16,7 +16,7 @@ Todo: test, refactor (shared setup module that gives same functionality as
 """
 # pylint: disable=too-many-locals
 # pylint: disable=too-many-branches
-# pylint: disable=too-many-branches
+# pylint: disable=too-many-statements
 
 from ctypes import c_uint32
 import sys
