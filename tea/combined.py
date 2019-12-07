@@ -31,7 +31,6 @@ def main(*kwargs):
     """Tiny encryption algorithm encrypt method"""
     _args = []
 
-
     if sys.argv:
         for arg in sys.argv:
             _args.append(str(arg).strip("'"))
@@ -132,6 +131,7 @@ def convert_ctype(k, zero, two, encrypt_or_decrypt):
 
 def print_result_reverse():
     """Print results function for decryption"""
+
     print("\nDeltaOne = " + hex(DELTA_ONE).rstrip("L"))
     print("DeltaTwo = " + hex(DELTA_TWO).rstrip("L"))
 
@@ -144,8 +144,10 @@ def print_result_reverse():
     print("\nL[0] = " + hex(L_LIST[0]).rstrip("L"))
     print("R[0] = " + hex(R_LIST[0]).rstrip("L"))
 
+
 def print_result():
     """Print results function for encryption"""
+
     print("\nDeltaOne = " + hex(DELTA_ONE).rstrip("L"))
     print("DeltaTwo = " + hex(DELTA_TWO).rstrip("L"))
 
@@ -212,6 +214,7 @@ def reverse_from_l2():
 
     R_LIST[0] = c_uint32(R_LIST[2] - xor_second).value
 
+
 def second_step_r0_l2():
     """Finds L0 and R0, second method of decryption"""
     reverse_two_left4 = c_uint32(R_LIST[0] << 4).value
@@ -229,6 +232,7 @@ def second_step_r0_l2():
         reverse_two_xor_first ^ reverse_two_add_delta_two).value
 
     L_LIST[0] = c_uint32(L_LIST[2] - reverse_two_xor_second).value
+
 
 if __name__ == '__main__':
     main()
