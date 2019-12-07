@@ -209,8 +209,7 @@ def main(*kwargs):
         reverse_from_l2()
         second_step_r0_l2()
         print_result_reverse()
-    print(_args)
-    print(len(_args))
+
 
 if __name__ == '__main__':
     main()

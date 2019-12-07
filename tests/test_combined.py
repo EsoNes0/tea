@@ -5,7 +5,6 @@
 import tea.combined
 
 
-
 def test_encryption(capsys):
     """Testing encryption algorithm"""
 
@@ -21,6 +20,7 @@ def test_encryption(capsys):
     assert "L[2] = 0xb72599b2\n" in out
     assert "R[2] = 0xcf8e5a4c\n" in out
     assert err == ""
+
 
 def test_decryption(capsys):
     """Testing decryption algorithm"""
