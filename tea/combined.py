@@ -14,6 +14,9 @@ Todo: test, refactor (shared setup module that gives same functionality as
       currently. Callable as method with arguments or with none or from
       command line with system arguments)
 """
+# pylint: disable=too-many-locals
+# pylint: disable=too-many-branches
+# pylint: disable=too-many-branches
 
 from ctypes import c_uint32
 import sys
@@ -39,12 +42,13 @@ def main(*kwargs):
         for kwarg in kwargs:
             _args.append(str(kwarg).strip("'"))
 
-    if len(_args) == 7:
-        if str(_args[1]) == "encrypt":
-            encrypt_or_decrypt = 1
+    if str(_args[1]) == "encrypt":
+        encrypt_or_decrypt = 1
 
-        if str(_args[1]) == "decrypt":
-            encrypt_or_decrypt = 0
+    if str(_args[1]) == "decrypt":
+        encrypt_or_decrypt = 0
+
+    if len(_args) == 7:
         if encrypt_or_decrypt == 1:
             l_zero = "0x" + _args[5]
             r_zero = "0x" + _args[6]
@@ -137,7 +141,6 @@ def main(*kwargs):
 
         R_LIST[2] = c_uint32(round_two_xor_second + R_LIST[0]).value
 
-
     def print_result():
         print("\nDeltaOne = " + hex(DELTA_ONE).rstrip("L"))
         print("DeltaTwo = " + hex(DELTA_TWO).rstrip("L"))
@@ -150,7 +153,6 @@ def main(*kwargs):
 
         print("\nL[2] = " + hex(R_LIST[1]).rstrip("L"))
         print("R[2] = " + hex(R_LIST[2]).rstrip("L"))
-
 
     def reverse_from_l2():
         reverse_one_left4 = c_uint32(L_LIST[2] << 4).value
@@ -168,9 +170,7 @@ def main(*kwargs):
 
         R_LIST[0] = c_uint32(R_LIST[2] - xor_second).value
 
-
     def second_step_r0_l2():
-
         reverse_two_left4 = c_uint32(R_LIST[0] << 4).value
         reverse_two_left4_add = c_uint32(reverse_two_left4 + K[0]).value
 
@@ -187,7 +187,6 @@ def main(*kwargs):
 
         L_LIST[0] = c_uint32(L_LIST[2] - reverse_two_xor_second).value
 
-
     def print_result_reverse():
         print("\nDeltaOne = " + hex(DELTA_ONE).rstrip("L"))
         print("DeltaTwo = " + hex(DELTA_TWO).rstrip("L"))
@@ -201,7 +200,6 @@ def main(*kwargs):
         print("\nL[0] = " + hex(L_LIST[0]).rstrip("L"))
         print("R[0] = " + hex(R_LIST[0]).rstrip("L"))
 
-
     if encrypt_or_decrypt == 1:
         find_l1_r1()
         find_l2_r2()
@@ -211,7 +209,8 @@ def main(*kwargs):
         reverse_from_l2()
         second_step_r0_l2()
         print_result_reverse()
-
+    print(_args)
+    print(len(_args))
 
 if __name__ == '__main__':
     main()
