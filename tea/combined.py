@@ -14,9 +14,6 @@ Todo: test, refactor (shared setup module that gives same functionality as
       currently. Callable as method with arguments or with none or from
       command line with system arguments)
 """
-# pylint: disable=too-many-locals
-# pylint: disable=too-many-branches
-# pylint: disable=too-many-statements
 
 from ctypes import c_uint32
 import sys
@@ -42,11 +39,12 @@ def main(*kwargs):
         for kwarg in kwargs:
             _args.append(str(kwarg).strip("'"))
 
-    if str(_args[1]) == "encrypt":
-        encrypt_or_decrypt = 1
+    if len(_args) >= 3:
+        if str(_args[1]) == "encrypt":
+            encrypt_or_decrypt = 1
 
-    if str(_args[1]) == "decrypt":
-        encrypt_or_decrypt = 0
+        if str(_args[1]) == "decrypt":
+            encrypt_or_decrypt = 0
 
     if len(_args) == 7:
         if encrypt_or_decrypt == 1:
@@ -109,97 +107,6 @@ def main(*kwargs):
 
     convert_ctype()
 
-    def find_l1_r1():
-        round_one_left4 = c_uint32(R_LIST[0] << 4).value
-        round_one_left4_add = c_uint32(round_one_left4 + K[0]).value
-
-        round_one_right5 = c_uint32(R_LIST[0] >> 5).value
-        round_one_right5_add = c_uint32(round_one_right5 + K[1]).value
-
-        add_delta_one = c_uint32(SUM_DELTA + DELTA_ONE).value
-        round_one_add_delta_one = c_uint32(R_LIST[0] + add_delta_one).value
-
-        xor_first = c_uint32(round_one_left4_add ^ round_one_right5_add).value
-        xor_second = c_uint32(xor_first ^ round_one_add_delta_one).value
-
-        R_LIST[1] = c_uint32(xor_second + L_LIST[0]).value
-
-    def find_l2_r2():
-        round_two_left4 = c_uint32(R_LIST[1] << 4).value
-        round_two_left4_add = c_uint32(round_two_left4 + K[2]).value
-
-        round_two_right5 = c_uint32(R_LIST[1] >> 5).value
-        round_two_right5_add = c_uint32(round_two_right5 + K[3]).value
-
-        add_delta_two = c_uint32(SUM_DELTA + DELTA_TWO).value
-        round_two_add_delta_two = c_uint32(R_LIST[1] + add_delta_two).value
-
-        round_two_xor_first = c_uint32(
-            round_two_left4_add ^ round_two_right5_add).value
-        round_two_xor_second = c_uint32(
-            round_two_xor_first ^ round_two_add_delta_two).value
-
-        R_LIST[2] = c_uint32(round_two_xor_second + R_LIST[0]).value
-
-    def print_result():
-        print("\nDeltaOne = " + hex(DELTA_ONE).rstrip("L"))
-        print("DeltaTwo = " + hex(DELTA_TWO).rstrip("L"))
-
-        print("\nL[0] = " + hex(L_LIST[0]).rstrip("L"))
-        print("R[0] = " + hex(R_LIST[0]).rstrip("L"))
-
-        print("\nL[1] = " + hex(R_LIST[0]).rstrip("L"))
-        print("R[1] = " + hex(R_LIST[1]).rstrip("L"))
-
-        print("\nL[2] = " + hex(R_LIST[1]).rstrip("L"))
-        print("R[2] = " + hex(R_LIST[2]).rstrip("L"))
-
-    def reverse_from_l2():
-        reverse_one_left4 = c_uint32(L_LIST[2] << 4).value
-        reverse_one_left4_add = c_uint32(reverse_one_left4 + K[2]).value
-
-        reverse_one_right5 = c_uint32(L_LIST[2] >> 5).value
-        reverse_one_right5_add = c_uint32(reverse_one_right5 + K[3]).value
-
-        add_delta_two = c_uint32(SUM_DELTA + DELTA_TWO).value
-        reverse_one_add_delta_two = c_uint32(L_LIST[2] + add_delta_two).value
-
-        xor_first = c_uint32(
-            reverse_one_left4_add ^ reverse_one_right5_add).value
-        xor_second = c_uint32(xor_first ^ reverse_one_add_delta_two).value
-
-        R_LIST[0] = c_uint32(R_LIST[2] - xor_second).value
-
-    def second_step_r0_l2():
-        reverse_two_left4 = c_uint32(R_LIST[0] << 4).value
-        reverse_two_left4_add = c_uint32(reverse_two_left4 + K[0]).value
-
-        reverse_two_right5 = c_uint32(R_LIST[0] >> 5).value
-        reverse_two_right5_add = c_uint32(reverse_two_right5 + K[1]).value
-
-        add_delta_one = c_uint32(SUM_DELTA + DELTA_ONE).value
-        reverse_two_add_delta_two = c_uint32(R_LIST[0] + add_delta_one).value
-
-        reverse_two_xor_first = c_uint32(
-            reverse_two_left4_add ^ reverse_two_right5_add).value
-        reverse_two_xor_second = c_uint32(
-            reverse_two_xor_first ^ reverse_two_add_delta_two).value
-
-        L_LIST[0] = c_uint32(L_LIST[2] - reverse_two_xor_second).value
-
-    def print_result_reverse():
-        print("\nDeltaOne = " + hex(DELTA_ONE).rstrip("L"))
-        print("DeltaTwo = " + hex(DELTA_TWO).rstrip("L"))
-
-        print("\nL[2] = " + hex(L_LIST[2]).rstrip("L"))
-        print("R[2] = " + hex(R_LIST[2]).rstrip("L"))
-
-        print("\nL[1] = " + hex(R_LIST[0]).rstrip("L"))
-        print("R[1] = " + hex(L_LIST[2]).rstrip("L"))
-
-        print("\nL[0] = " + hex(L_LIST[0]).rstrip("L"))
-        print("R[0] = " + hex(R_LIST[0]).rstrip("L"))
-
     if encrypt_or_decrypt == 1:
         find_l1_r1()
         find_l2_r2()
@@ -210,6 +117,101 @@ def main(*kwargs):
         second_step_r0_l2()
         print_result_reverse()
 
+def print_result_reverse():
+    """Print results function for decryption"""
+    print("\nDeltaOne = " + hex(DELTA_ONE).rstrip("L"))
+    print("DeltaTwo = " + hex(DELTA_TWO).rstrip("L"))
+
+    print("\nL[2] = " + hex(L_LIST[2]).rstrip("L"))
+    print("R[2] = " + hex(R_LIST[2]).rstrip("L"))
+
+    print("\nL[1] = " + hex(R_LIST[0]).rstrip("L"))
+    print("R[1] = " + hex(L_LIST[2]).rstrip("L"))
+
+    print("\nL[0] = " + hex(L_LIST[0]).rstrip("L"))
+    print("R[0] = " + hex(R_LIST[0]).rstrip("L"))
+
+def print_result():
+    """Print results function for encryption"""
+    print("\nDeltaOne = " + hex(DELTA_ONE).rstrip("L"))
+    print("DeltaTwo = " + hex(DELTA_TWO).rstrip("L"))
+
+    print("\nL[0] = " + hex(L_LIST[0]).rstrip("L"))
+    print("R[0] = " + hex(R_LIST[0]).rstrip("L"))
+
+    print("\nL[1] = " + hex(R_LIST[0]).rstrip("L"))
+    print("R[1] = " + hex(R_LIST[1]).rstrip("L"))
+
+    print("\nL[2] = " + hex(R_LIST[1]).rstrip("L"))
+    print("R[2] = " + hex(R_LIST[2]).rstrip("L"))
+
+
+def find_l1_r1():
+    round_one_left4 = c_uint32(R_LIST[0] << 4).value
+    round_one_left4_add = c_uint32(round_one_left4 + K[0]).value
+
+    round_one_right5 = c_uint32(R_LIST[0] >> 5).value
+    round_one_right5_add = c_uint32(round_one_right5 + K[1]).value
+
+    add_delta_one = c_uint32(SUM_DELTA + DELTA_ONE).value
+    round_one_add_delta_one = c_uint32(R_LIST[0] + add_delta_one).value
+
+    xor_first = c_uint32(round_one_left4_add ^ round_one_right5_add).value
+    xor_second = c_uint32(xor_first ^ round_one_add_delta_one).value
+
+    R_LIST[1] = c_uint32(xor_second + L_LIST[0]).value
+
+
+def find_l2_r2():
+    round_two_left4 = c_uint32(R_LIST[1] << 4).value
+    round_two_left4_add = c_uint32(round_two_left4 + K[2]).value
+
+    round_two_right5 = c_uint32(R_LIST[1] >> 5).value
+    round_two_right5_add = c_uint32(round_two_right5 + K[3]).value
+
+    add_delta_two = c_uint32(SUM_DELTA + DELTA_TWO).value
+    round_two_add_delta_two = c_uint32(R_LIST[1] + add_delta_two).value
+
+    round_two_xor_first = c_uint32(
+        round_two_left4_add ^ round_two_right5_add).value
+    round_two_xor_second = c_uint32(
+        round_two_xor_first ^ round_two_add_delta_two).value
+
+    R_LIST[2] = c_uint32(round_two_xor_second + R_LIST[0]).value
+
+
+def reverse_from_l2():
+    reverse_one_left4 = c_uint32(L_LIST[2] << 4).value
+    reverse_one_left4_add = c_uint32(reverse_one_left4 + K[2]).value
+
+    reverse_one_right5 = c_uint32(L_LIST[2] >> 5).value
+    reverse_one_right5_add = c_uint32(reverse_one_right5 + K[3]).value
+
+    add_delta_two = c_uint32(SUM_DELTA + DELTA_TWO).value
+    reverse_one_add_delta_two = c_uint32(L_LIST[2] + add_delta_two).value
+
+    xor_first = c_uint32(
+        reverse_one_left4_add ^ reverse_one_right5_add).value
+    xor_second = c_uint32(xor_first ^ reverse_one_add_delta_two).value
+
+    R_LIST[0] = c_uint32(R_LIST[2] - xor_second).value
+
+def second_step_r0_l2():
+    reverse_two_left4 = c_uint32(R_LIST[0] << 4).value
+    reverse_two_left4_add = c_uint32(reverse_two_left4 + K[0]).value
+
+    reverse_two_right5 = c_uint32(R_LIST[0] >> 5).value
+    reverse_two_right5_add = c_uint32(reverse_two_right5 + K[1]).value
+
+    add_delta_one = c_uint32(SUM_DELTA + DELTA_ONE).value
+    reverse_two_add_delta_two = c_uint32(R_LIST[0] + add_delta_one).value
+
+    reverse_two_xor_first = c_uint32(
+        reverse_two_left4_add ^ reverse_two_right5_add).value
+    reverse_two_xor_second = c_uint32(
+        reverse_two_xor_first ^ reverse_two_add_delta_two).value
+
+    L_LIST[0] = c_uint32(L_LIST[2] - reverse_two_xor_second).value
 
 if __name__ == '__main__':
     main()
