@@ -39,13 +39,12 @@ def main(*kwargs):
         for kwarg in kwargs:
             _args.append(str(kwarg).strip("'"))
 
-    if str(_args[1]) == "encrypt":
-        encrypt_or_decrypt = 1
-
-    if str(_args[1]) == "decrypt":
-        encrypt_or_decrypt = 0
-
     if len(_args) == 7:
+        if str(_args[1]) == "encrypt":
+            encrypt_or_decrypt = 1
+
+        if str(_args[1]) == "decrypt":
+            encrypt_or_decrypt = 0
         if encrypt_or_decrypt == 1:
             l_zero = "0x" + _args[5]
             r_zero = "0x" + _args[6]
@@ -69,7 +68,6 @@ def main(*kwargs):
         k_two = "0x" + _args[4]
         k_three = "0x" + _args[5]
 
-
     else:
         encrypt_or_decrypt = int(input(
             "Please enter 1 for encryption and 0 for decryption: "))
@@ -92,22 +90,20 @@ def main(*kwargs):
             r_two = "0x" + \
                 input("Please input R[2] in Hex String (without “0x”): ")
 
-
     def convert_ctype():
         "converts inputed values into ctypes"
         K[0] = c_uint32(int(k_zero, 16)).value
         K[1] = c_uint32(int(k_one, 16)).value
         K[2] = c_uint32(int(k_two, 16)).value
         K[3] = c_uint32(int(k_three, 16)).value
-        if encrypt_or_decrypt == 1 or _args[1] == 'encrpyt':
+        if encrypt_or_decrypt == 1:
             L_LIST[0] = c_uint32(int(l_zero, 16)).value
             R_LIST[0] = c_uint32(int(r_zero, 16)).value
-        if encrypt_or_decrypt == 0 or _args[1] == 'decrypt':
+        if encrypt_or_decrypt == 0:
             L_LIST[2] = c_uint32(int(l_two, 16)).value
             R_LIST[2] = c_uint32(int(r_two, 16)).value
 
     convert_ctype()
-
 
     def find_l1_r1():
         round_one_left4 = c_uint32(R_LIST[0] << 4).value
@@ -123,7 +119,6 @@ def main(*kwargs):
         xor_second = c_uint32(xor_first ^ round_one_add_delta_one).value
 
         R_LIST[1] = c_uint32(xor_second + L_LIST[0]).value
-
 
     def find_l2_r2():
         round_two_left4 = c_uint32(R_LIST[1] << 4).value
@@ -207,19 +202,15 @@ def main(*kwargs):
         print("R[0] = " + hex(R_LIST[0]).rstrip("L"))
 
 
-    if encrypt_or_decrypt == 1 or _args[1] == "encrypt":
+    if encrypt_or_decrypt == 1:
         find_l1_r1()
         find_l2_r2()
         print_result()
 
-    if encrypt_or_decrypt == 0 or _args[1] == "decrypt":
+    if encrypt_or_decrypt == 0:
         reverse_from_l2()
         second_step_r0_l2()
         print_result_reverse()
-
-    print(_args)
-    print((len(_args)))
-
 
 
 if __name__ == '__main__':
