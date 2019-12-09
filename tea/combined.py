@@ -50,10 +50,10 @@ def set_variables(_args):
     two = {}
 
     if len(_args) >= 3:
-        if str(_args[1]) == "encrypt":
+        if str(_args[1]) == "encrypt" or str(_args[0]) == "encrypt":
             encrypt_or_decrypt = 1
 
-        if str(_args[1]) == "decrypt":
+        if str(_args[1]) == "decrypt" or str(_args[0]) == "decrypt":
             encrypt_or_decrypt = 0
 
     if len(_args) == 7:
