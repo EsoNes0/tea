@@ -3,16 +3,15 @@
 CS3750-001
 Homework 2
 Python
-Larsen Close & Greg Dews
+Larsen Close
 
 Encryption and Decryption - TEA (Tiny Encryption Algorithm)
-Input:  Keyboard (kb)
+Input:  Keyboard (kb) as program, with arguments from command line, or with
+        arguments as a function call.
 Output: Standard out (print)
         Will have system out dumped into text file via cs3750a server command
 
-Todo: test, refactor (shared setup module that gives same functionality as
-      currently. Callable as method with arguments or with none or from
-      command line with system arguments)
+Todo: refactor tests, readme
 """
 
 from ctypes import c_uint32
