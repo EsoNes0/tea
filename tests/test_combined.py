@@ -75,7 +75,7 @@ def test_decryption_2(capsys):
     assert err == ""
 
 
-def test_set_variables(capsys, mocker):
+def test_set_variables_encrypt(capsys, mocker):
     """Testing set variables method"""
     _args = []
     mocked_input = mocker.patch('builtins.input')
@@ -91,5 +91,25 @@ def test_set_variables(capsys, mocker):
     assert "R[1] = 0xb72599b2\n" in captured.out
     assert "L[2] = 0xb72599b2\n" in captured.out
     assert "R[2] = 0xcf8e5a4c\n" in captured.out
+    assert captured.err == ""
+    assert mocked_input.call_count == 7
+
+
+def test_set_variables_decrypt(capsys, mocker):
+    """Testing set variables method"""
+    _args = []
+    mocked_input = mocker.patch('builtins.input')
+    mocked_input.side_effect = [0, "9ff579e5", "fd720aac", "36629fc9",
+                                "64a74968", "eee21246", "bf121dc5"]
+    tea.combined.set_variables(_args)
+    captured = capsys.readouterr()
+    assert "DeltaOne = 0x11111111\n" in captured.out
+    assert "DeltaTwo = 0x22222222\n" in captured.out
+    assert "L[2] = 0xeee21246\n" in captured.out
+    assert "R[2] = 0xbf121dc5\n" in captured.out
+    assert "L[1] = 0x6578740a\n" in captured.out
+    assert "R[1] = 0xeee21246\n" in captured.out
+    assert "L[0] = 0x6d792074\n" in captured.out
+    assert "R[0] = 0x6578740a\n" in captured.out
     assert captured.err == ""
     assert mocked_input.call_count == 7
