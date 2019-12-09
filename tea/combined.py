@@ -105,7 +105,7 @@ def set_variables(_args):
 
 
 def convert_ctype(k, zero, two, encrypt_or_decrypt):
-    "converts inputed values into ctypes"
+    """converts inputed values into ctypes"""
     K[0] = c_uint32(int(k[0], 16)).value
     K[1] = c_uint32(int(k[1], 16)).value
     K[2] = c_uint32(int(k[2], 16)).value
@@ -161,7 +161,7 @@ def print_result():
 
 
 def find_l1_r1():
-    """Finds L1 and R1, first method of encryption"""
+    """Finds L1 and R1, first function of encryption"""
     round_one_left4 = c_uint32(R_LIST[0] << 4).value
     round_one_left4_add = c_uint32(round_one_left4 + K[0]).value
 
@@ -178,7 +178,7 @@ def find_l1_r1():
 
 
 def find_l2_r2():
-    """Finds L2 and R2, second method of encryption"""
+    """Finds L2 and R2, second function of encryption"""
     round_two_left4 = c_uint32(R_LIST[1] << 4).value
     round_two_left4_add = c_uint32(round_two_left4 + K[2]).value
 
@@ -197,7 +197,7 @@ def find_l2_r2():
 
 
 def reverse_from_l2():
-    """Reverses from given L2, first method of decryption"""
+    """Reverses from given L2, first function of decryption"""
     reverse_one_left4 = c_uint32(L_LIST[2] << 4).value
     reverse_one_left4_add = c_uint32(reverse_one_left4 + K[2]).value
 
@@ -215,7 +215,7 @@ def reverse_from_l2():
 
 
 def second_step_r0_l2():
-    """Finds L0 and R0, second method of decryption"""
+    """Finds L0 and R0, second function of decryption"""
     reverse_two_left4 = c_uint32(R_LIST[0] << 4).value
     reverse_two_left4_add = c_uint32(reverse_two_left4 + K[0]).value
 
