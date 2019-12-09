@@ -38,3 +38,38 @@ def test_decryption(capsys):
     assert "L[0] = 0xa0000009\n" in out
     assert "R[0] = 0x8000006b\n" in out
     assert err == ""
+
+
+def test_encryption_2(capsys):
+    """Testing encryption algorithm"""
+
+    tea.combined.main('encrypt', '9ff579e5', 'fd720aac', '36629fc9',
+                      '64a74968', '6d792074', '6578740a')
+    out, err = capsys.readouterr()
+    assert "DeltaOne = 0x11111111\n" in out
+    assert "DeltaTwo = 0x22222222\n" in out
+    assert "L[0] = 0x6d792074\n" in out
+    assert "R[0] = 0x6578740a\n" in out
+    assert "L[1] = 0x6578740a\n" in out
+    assert "R[1] = 0xeee21246\n" in out
+    assert "L[2] = 0xeee21246\n" in out
+    assert "R[2] = 0xbf121dc5\n" in out
+    assert err == ""
+
+
+def test_decryption_2(capsys):
+    """Testing decryption algorithm"""
+
+    tea.combined.main("decrypt", "9ff579e5", "fd720aac", "36629fc9",
+                      "64a74968", "eee21246", "bf121dc5")
+    out, err = capsys.readouterr()
+
+    assert "DeltaOne = 0x11111111\n" in out
+    assert "DeltaTwo = 0x22222222\n" in out
+    assert "L[2] = 0xeee21246\n" in out
+    assert "R[2] = 0xbf121dc5\n" in out
+    assert "L[1] = 0x6578740a\n" in out
+    assert "R[1] = 0xeee21246\n" in out
+    assert "L[0] = 0x6d792074\n" in out
+    assert "R[0] = 0x6578740a\n" in out
+    assert err == ""
