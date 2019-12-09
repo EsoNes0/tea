@@ -9,7 +9,7 @@ Encryption and Decryption - TEA (Tiny Encryption Algorithm)
 Input:  Keyboard (kb) as program, with arguments from command line, or with
         arguments as a function call.
 Output: Standard out (print)
-        Will have system out dumped into text file via cs3750a server command
+        Will have out piped into text file via cs3750a server command
 
 Todo: refactor tests, readme
 """
