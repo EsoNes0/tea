@@ -27,7 +27,7 @@ R_LIST = [0, 1, 2]
 
 
 def main(*kwargs):
-    """Tiny encryption algorithm encrypt method"""
+    """Tiny encryption algorithm main function"""
     _args = []
 
     if sys.argv:
@@ -161,7 +161,7 @@ def print_result():
 
 
 def find_l1_r1():
-    """Finds L1 and R1, first function of encryption"""
+    """Finds L1 and R1, round one of encryption"""
     round_one_left4 = c_uint32(R_LIST[0] << 4).value
     round_one_left4_add = c_uint32(round_one_left4 + K[0]).value
 
@@ -178,7 +178,7 @@ def find_l1_r1():
 
 
 def find_l2_r2():
-    """Finds L2 and R2, second function of encryption"""
+    """Finds L2 and R2, round 2 of encryption"""
     round_two_left4 = c_uint32(R_LIST[1] << 4).value
     round_two_left4_add = c_uint32(round_two_left4 + K[2]).value
 
@@ -197,7 +197,7 @@ def find_l2_r2():
 
 
 def reverse_from_l2():
-    """Reverses from given L2, first function of decryption"""
+    """Reverses from given L2, round one of decryption"""
     reverse_one_left4 = c_uint32(L_LIST[2] << 4).value
     reverse_one_left4_add = c_uint32(reverse_one_left4 + K[2]).value
 
@@ -215,7 +215,7 @@ def reverse_from_l2():
 
 
 def second_step_r0_l2():
-    """Finds L0 and R0, second function of decryption"""
+    """Finds L0 and R0, round two of decryption"""
     reverse_two_left4 = c_uint32(R_LIST[0] << 4).value
     reverse_two_left4_add = c_uint32(reverse_two_left4 + K[0]).value
 
