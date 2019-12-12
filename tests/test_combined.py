@@ -119,8 +119,8 @@ def test_set_variables_decrypt_with_input(capsys, mocker):
                                 "64a74968", "eee21246", "bf121dc5"]
     tea.combined.set_variables(_args)
     captured = capsys.readouterr()
-    assert "DeltaOne = 0x11111111\n" in captured.out
-    assert "DeltaTwo = 0x22222222\n" in captured.out
+    assert DELTA_ONE in captured.out
+    assert DELTA_TWO in captured.out
     assert "L[2] = 0xeee21246\n" in captured.out
     assert "R[2] = 0xbf121dc5\n" in captured.out
     assert "L[1] = 0x6578740a\n" in captured.out
