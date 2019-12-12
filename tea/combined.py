@@ -197,7 +197,7 @@ def find_l2_r2():
 
 
 def reverse_from_l2():
-    """Reverses from given L2, round one of decryption"""
+    """Reverses from given L2, round one of decryption, finds L1 and R0"""
     reverse_one_left4 = c_uint32(L_LIST[2] << 4).value
     reverse_one_left4_add = c_uint32(reverse_one_left4 + K[2]).value
 
@@ -215,7 +215,7 @@ def reverse_from_l2():
 
 
 def second_step_r0_l2():
-    """Finds L0 and R0, round two of decryption"""
+    """Round two of decryption, Finds L0"""
     reverse_two_left4 = c_uint32(R_LIST[0] << 4).value
     reverse_two_left4_add = c_uint32(reverse_two_left4 + K[0]).value
 
