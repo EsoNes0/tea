@@ -121,12 +121,12 @@ def test_set_variables_decrypt_with_input(capsys, mocker):
     captured = capsys.readouterr()
     assert DELTA_ONE in captured.out
     assert DELTA_TWO in captured.out
-    assert "L[2] = 0xeee21246\n" in captured.out
-    assert "R[2] = 0xbf121dc5\n" in captured.out
-    assert "L[1] = 0x6578740a\n" in captured.out
-    assert "R[1] = 0xeee21246\n" in captured.out
-    assert "L[0] = 0x6d792074\n" in captured.out
-    assert "R[0] = 0x6578740a\n" in captured.out
+    assert L_2_2 in captured.out
+    assert R_2_2 in captured.out
+    assert L_1_2 in captured.out
+    assert R_1_2 in captured.out
+    assert L_0_2 in captured.out
+    assert R_0_2 in captured.out
     assert captured.err == ""
     assert mocked_input.call_count == 7
 
@@ -156,10 +156,10 @@ def test_set_variables_decrypt_with_args(capsys):
     captured = capsys.readouterr()
     assert DELTA_ONE in captured.out
     assert DELTA_TWO in captured.out
-    assert "L[2] = 0xeee21246\n" in captured.out
-    assert "R[2] = 0xbf121dc5\n" in captured.out
-    assert "L[1] = 0x6578740a\n" in captured.out
-    assert "R[1] = 0xeee21246\n" in captured.out
-    assert "L[0] = 0x6d792074\n" in captured.out
-    assert "R[0] = 0x6578740a\n" in captured.out
+    assert L_2_2 in captured.out
+    assert R_2_2 in captured.out
+    assert L_1_2 in captured.out
+    assert R_1_2 in captured.out
+    assert L_0_2 in captured.out
+    assert R_0_2 in captured.out
     assert captured.err == ""
